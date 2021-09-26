@@ -1,0 +1,25 @@
+<table class="table mt-4">
+        <thead>
+            <tr>
+                <th scope="col">
+                    Tên thành viên
+                </th>                
+                <th scope="col">
+                    refer
+                    </th>
+                
+                <th scope="col">
+                    Điểm tích lũy
+                    </th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each members}}
+            <tr>
+                <td>{{this.name}}</td>
+                <td>{{this.refer}}</td>
+                <td>{{this.point}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
