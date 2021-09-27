@@ -11,29 +11,40 @@ class SiteController {
     store(req, res, next) {
         req.body.refer = Math.floor(Math.random() * 100000) + 100000;
         req.body.point = 100;
+        if(req.body.code == ""){
+            req.body.code = 1;
+        }
         const new_member = new Member(req.body);
         new_member.save()
             .then(() => {
-                if (req.body.code != "") {
+                // res.json(req.body);
+                if (req.body.code != 1) {
                     Member.findOne({ refer: req.body.code })
                         .then(member => {
+                            // res.json(member);
                             var new_point = member.point + 10;
                             Member.updateOne({ refer: member.refer }, { point: new_point })
                                 .then(() => {
-                                    Member.findOne({ refer: member.code })
+                                    if (member.code != 1){
+                                        Member.findOne({ refer: member.code })
                                         .then(member_2 => {
                                             var new_point_2 = member_2.point + 5;
                                             Member.updateOne({ refer: member_2.refer }, { point: new_point_2 })
-                                                .then(() => res.send("bạn đã đăng kí thành công"))
+                                                .then(() => res.redirect("/list"))
                                                 .catch(next);
+                                            // res.json(member_2)
                                         })
                                         .catch(next);
+                                    }else{
+                                        res.redirect("/list")
+                                    }
+                                    
                                 })
                                 .catch(next);
                         })
                         .catch(next);
                 } else {
-                    res.send("bạn đã đăng kí thành công");
+                    res.redirect("/list");
                 }
             })
             .catch(next);
